@@ -14,16 +14,14 @@ r = redis.Redis()
 
 
 def url_access_count(method):
-    """decorator for get_page function"""
+    """get_page function decorator"""
     @wraps(method)
     def wrapper(url):
-        """wrapper function"""
         key = "cached:" + url
         cached_value = r.get(key)
         if cached_value:
             return cached_value.decode("utf-8")
 
-            # Get new content and update cache
         key_count = "count:" + url
         html_content = method(url)
 
@@ -36,7 +34,7 @@ def url_access_count(method):
 
 @url_access_count
 def get_page(url: str) -> str:
-    """obtain the HTML content of a particular"""
+    """obtain the HTML content"""
     results = requests.get(url)
     return results.text
 
